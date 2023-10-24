@@ -5,7 +5,6 @@ import {
     PrimaryGeneratedColumn,
     Unique,
     UpdateDateColumn,
-    ManyToOne,
     JoinColumn,
     OneToMany,
   } from "typeorm";
@@ -33,6 +32,6 @@ import { Product } from "./Product";
 
     @OneToMany((_type=>Product),(product:Product)=>product.id)
     @JoinColumn({name:"productId"})
-    product!:Product
+    product!:Array<Product>
   }
   
