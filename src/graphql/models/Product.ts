@@ -6,11 +6,12 @@ import {
     Unique,
     UpdateDateColumn,
     ManyToOne,
-    JoinColumn,
   } from "typeorm";
   
   import { Category } from "./Category";
+import { Field, ObjectType } from "type-graphql";
   
+  @ObjectType()
   @Entity()
   @Unique(["code"])
   export class Product {
@@ -29,7 +30,7 @@ import {
     @UpdateDateColumn()
     public updatedAt!: Date;
   
-    @ManyToOne((_type) => Category, (category: Category) => category.id)
-    @JoinColumn({ name: "categoryId" })
+    @Field((_type) => Category)
+    @ManyToOne((_type) => Category, (category: Category) => category.products)
     public category!: Category;
   }

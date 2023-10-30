@@ -1,37 +1,41 @@
+import { Field, ObjectType } from "type-graphql";
 import {
-    Column,
-    CreateDateColumn,
-    Entity,
-    PrimaryGeneratedColumn,
-    Unique,
-    UpdateDateColumn,
-    JoinColumn,
-    OneToMany,
-  } from "typeorm";
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  Unique,
+  UpdateDateColumn,
+  OneToMany,
+} from "typeorm";
+
 import { Product } from "./Product";
 
-  @Entity()
+@ObjectType()
+@Entity()
+@Unique(["code"])
+export class Category {
+  @Field((_type) => Number)
+  @PrimaryGeneratedColumn()
+  public readonly id!: number;
 
-  @Unique(["code"])
+  @Field()
+  @Column({ type: "varchar" })
+  public code!: string;
 
-  export class Category{
-    @PrimaryGeneratedColumn()
-    readonly id!:string
+  @Field()
+  @Column({ type: "varchar" })
+  public name!: string;
 
-    @Column({type:"varchar"})
-    code!:string
+  @Field()
+  @CreateDateColumn()
+  public createdAt!: Date;
 
-    @Column({type:"varchar"})
-    name!:string
+  @Field()
+  @UpdateDateColumn()
+  public updatedAt!: Date;
 
-    @CreateDateColumn()
-    createdAt!:Date
-
-    @UpdateDateColumn()
-    updatedAt!:Date
-
-    @OneToMany((_type=>Product),(product:Product)=>product.id)
-    @JoinColumn({name:"productId"})
-    product!:Array<Product>
-  }
-  
+  @Field((_type) => [Product])
+  @OneToMany((_type) => Product, (product: Product) => product.category)
+  public products?: Array<Product>;
+}
